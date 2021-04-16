@@ -6,11 +6,11 @@
     "rewrites": [
       {
         "source": "api",
-        "destination": "/api"
+        "function": "/api"
       },
       {
         "source": "api",
-        "destination": "/admin"
+        "function": "/admin"
       }
     ]
   }
