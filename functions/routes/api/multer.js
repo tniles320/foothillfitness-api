@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const multer = require("multer");
 const AWS = require("aws-sdk");
+const functions = require("firebase-functions");
 
 require("dotenv").config();
 
@@ -11,16 +12,25 @@ router.post("/", upload.single("file"), function (req, res) {
   const file = req.file;
   const fileName = Date.now() + "-" + file.originalname;
 
+  const AWS_ACCESS_KEY = functions.config().foothillfitness.aws_access_key;
+  const AWS_SECRET_KEY = functions.config().foothillfitness.aws_secret_key;
+  const AWS_REGION = functions.config().foothillfitness.aws_region;
+  const AWS_BUCKET_NAME = functions.config().foothillfitness.aws_bucket;
+
   const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_KEY,
-    region: process.env.AWS_REGION,
+    // accessKeyId: process.env.AWS_ACCESS_KEY,
+    // secretAccessKey: process.env.AWS_SECRET_KEY,
+    // region: process.env.AWS_REGION,
+    accessKeyId: AWS_ACCESS_KEY,
+    secretAccessKey: AWS_SECRET_KEY,
+    region: AWS_REGION,
   });
 
   // Where you want to store your file
 
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
+    // Bucket: process.env.AWS_BUCKET_NAME,
+    Bucket: AWS_BUCKET_NAME,
     Key: fileName,
     Body: file.buffer,
     ContentType: file.mimetype,

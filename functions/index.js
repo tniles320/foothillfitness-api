@@ -10,6 +10,8 @@ const routes = require("./routes");
 const functions = require("firebase-functions");
 // const PORT = process.env.PORT || 3001;
 
+const MONGODB_URI = functions.config().foothillfitness.mongodb_uri;
+
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -28,7 +30,8 @@ if (process.env.NODE_ENV === "production") {
 
 // allows mongoose to use atlas or local database
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/foothillfitness",
+  // process.env.MONGODB_URI || "mongodb://localhost/foothillfitness",
+  MONGODB_URI,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -66,4 +69,4 @@ app.use(routes);
 //   console.log(`🌎 ==> API server now on port ${PORT}!`);
 // });
 
-exports.api = functions.https.onRequest(app);
+exports.app = functions.https.onRequest(app);
