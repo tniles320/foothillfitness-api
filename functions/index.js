@@ -24,9 +24,9 @@ app.use(
 );
 
 // Serve up static assets
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static("client/build"));
+// }
 
 // allows mongoose to use atlas or local database
 mongoose.connect(
@@ -51,6 +51,18 @@ app.use(cookieParser("secretcode"));
 app.use(passport.initialize());
 app.use(passport.session());
 require("./config/passportConfig")(passport);
+
+app.use("*", function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://foothillfitness.com");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Credentials", true);
+  next();
+});
+
+// enable pre-flight
+app.options("*", cors());
 
 // const directory = path.join(__dirname, "public/uploads");
 // app.use("/public/uploads", express.static(directory));
