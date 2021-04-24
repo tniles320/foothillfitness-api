@@ -6,12 +6,18 @@ const passport = require("passport");
 module.exports = {
   getUser: function (req, res) {
     if (req.user) {
-      User.findOne({ username: req.user.username }).then((dbUser) => {
-        res.send({
-          id: dbUser._id,
-          username: dbUser.username,
+      User.findOne({ username: req.user.username })
+        .then((dbUser) => {
+          res.send({
+            id: dbUser._id,
+            username: dbUser.username,
+          });
+        })
+        .catch((err) => {
+          throw new Error(err);
         });
-      });
+    } else {
+      throw new Error("No user provided");
     }
   },
   findById: function (req, res) {
